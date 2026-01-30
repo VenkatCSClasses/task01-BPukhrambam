@@ -23,29 +23,43 @@ class BankAccountTest {
 
     @Test
     void isEmailValidTest() {
+
+        // Alphanumeric
         assertTrue(BankAccount.isEmailValid("a@b.com"));
+
+        // Prefix Allowed Special Characters
         assertTrue(BankAccount.isEmailValid("abc_def@mail.com"));
-        assertTrue(BankAccount.isEmailValid("abc.def@mail-archive.com"));
         assertTrue(BankAccount.isEmailValid("abc.def@mail.com"));
         assertTrue(BankAccount.isEmailValid("abc-d@mail.com"));
+
+        // Domain Allowed Special Characters
+        assertTrue(BankAccount.isEmailValid("abc.def@mail-archive.com"));
+
+        // Valid Domains
         assertTrue(BankAccount.isEmailValid("abc.def@mail.com"));
         assertTrue(BankAccount.isEmailValid("abc.def@mail.cc"));
         assertTrue(BankAccount.isEmailValid("abc.def@mail.org"));
 
-        assertFalse(BankAccount.isEmailValid("")); // empty string
+        // Missing Portions
+        assertFalse(BankAccount.isEmailValid("")); // empty string (border case)
         assertFalse(BankAccount.isEmailValid("ab.com")); // missing @ symbol
-        assertFalse(BankAccount.isEmailValid("abc-@mail.com")); // terminates with special character before @
-        assertFalse(BankAccount.isEmailValid("abc..def@mail.com")); // consecutive special characters
-        assertFalse(BankAccount.isEmailValid(".abc@mail.com")); // starts with special character
-        assertFalse(BankAccount.isEmailValid("abc#def@mail.com")); // invalid special character
-        assertFalse(BankAccount.isEmailValid("abc.def@mail.c")); // domain suffix only has one character
-        assertFalse(BankAccount.isEmailValid("abc.def@mail#archive.com")); // special character in domain name
         assertFalse(BankAccount.isEmailValid("abc.def@mail")); // missing domain suffix
-        assertFalse(BankAccount.isEmailValid("abc.def@mail..com")); // consecutive special characters in domain name
-        assertFalse(BankAccount.isEmailValid("abc@def@mail.com")); // multiple @ symbols
         assertFalse(BankAccount.isEmailValid("@mail.com")); // missing local part
         assertFalse(BankAccount.isEmailValid("abc@")); // missing domain part
 
+        // Invalid Special Characters
+        assertFalse(BankAccount.isEmailValid("abc#def@mail.com")); // invalid special character
+        assertFalse(BankAccount.isEmailValid("abc..def@mail.com")); // consecutive special characters (border case)
+        assertFalse(BankAccount.isEmailValid("abc.def@mail#archive.com")); // special character in domain name
+        assertFalse(BankAccount.isEmailValid("abc@def@mail.com")); // multiple @ symbols (border case)
+
+        // Invalid Special Character Locations
+        assertFalse(BankAccount.isEmailValid("abc.def@mail..com")); // consecutive special characters in domain name 
+        assertFalse(BankAccount.isEmailValid(".abc@mail.com")); // starts with special character (border case)
+        assertFalse(BankAccount.isEmailValid("abc-@mail.com")); // terminates with special character before @ (border case)
+
+        // Improper Length
+        assertFalse(BankAccount.isEmailValid("abc.def@mail.c")); // domain suffix only has one character (border case)
     }
 
     @Test
