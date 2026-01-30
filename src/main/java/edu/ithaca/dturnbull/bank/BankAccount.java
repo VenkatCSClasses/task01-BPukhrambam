@@ -40,11 +40,73 @@ public class BankAccount {
 
 
     public static boolean isEmailValid(String email){
-        if (email.indexOf('@') == -1){
+        // Checks for empty/blank email
+        if (email.isBlank()){
             return false;
         }
-        else {
-            return true;
+
+        // Find @ symbol, right most period
+        int atIndex = email.indexOf('@');
+        int lastPeriodIndex = email.lastIndexOf('.');
+        if (atIndex == -1 || lastPeriodIndex == -1 || lastPeriodIndex <= atIndex){
+            return false;
         }
+
+        // Check if prefix is missing
+        if (atIndex == 0){
+            return false;
+        }
+ 
+        // Deal with prefix
+        for (int i = 0; i < atIndex; i++){
+            char c = email.charAt(i);
+            // Check alphaNum or special char
+            boolean charAlphaNum = Character.isLetterOrDigit(c);
+            if (!charAlphaNum){
+                if (!isPrefixSpecial(c)){
+                    // Neither alphaNum or valid special
+                    return false;
+                }
+                else {
+                    // Checking multiple special chars in a row, or first char
+                    if (!Character.isLetterOrDigit(email.charAt(i + 1)) || i == 0){
+                        return false;
+                    }
+                    // Incrementing an additional time as no need to recheck if its valid character
+                    i++;
+                }
+            }
+        }
+
+        // Deal with domain
+        if (lastPeriodIndex + 2 >= email.length()){
+            // Last portion of domain too small
+            return false;
+        }
+        for (int i = atIndex + 1; i < email.length(); i++){
+            char c = email.charAt(i);
+            // Check alphaNum, dash
+            if (!(Character.isLetterOrDigit(c)) && !(c == '-')){
+                // See if its the one allowed period
+                if (!(c == '.' && i == lastPeriodIndex)){
+                    return false;
+                }
+            }
+        }
+
+        return true;
+
+    }
+
+    // Returns true if it is a special character valid in the prefix
+    public static boolean isPrefixSpecial(char c){
+        // Everything in the wiki link under special characters, minus # as it was included in a test as invalid...
+        char[] prefixSpecial = {'.', '!', '$', '%', '&', '\'', '*', '+', '-', '/', '=', '?', '^', '_', '`', '{', '|', '}', '~'};
+        for (char special : prefixSpecial){
+            if (special == c){
+                return true;
+            }
+        }
+        return false;
     }
 }
