@@ -7,9 +7,14 @@ class BankAccountTest {
 
     @Test
     void getBalanceTest() {
+        // normal case
         BankAccount bankAccount = new BankAccount("a@b.com", 200);
+        assertEquals(200, bankAccount.getBalance(), 0.001); // not boundary: positive balance
 
-        assertEquals(200, bankAccount.getBalance(), 0.001);
+        // zero balance case
+        BankAccount bankAccount2 = new BankAccount("b@c.com", 0);
+        assertEquals(0, bankAccount2.getBalance(), 0.001); // boundary case: zero balance
+
     }
 
     @Test
