@@ -14,11 +14,24 @@ class BankAccountTest {
 
     @Test
     void withdrawTest() throws InsufficientFundsException {
+
+        // normal withdraw
         BankAccount bankAccount = new BankAccount("a@b.com", 200);
         bankAccount.withdraw(100);
 
-        assertEquals(100, bankAccount.getBalance(), 0.001);
-        assertThrows(InsufficientFundsException.class, () -> bankAccount.withdraw(300));
+        assertEquals(100, bankAccount.getBalance(), 0.001); // Not boundary, amount is less than balance
+        bankAccount.withdraw(100); // Boundary, amount is equal to balance
+
+        // invalid inputs
+        BankAccount bankAccount2 = new BankAccount("b@c.com", 100);
+        assertThrows(IllegalArgumentException.class, () -> bankAccount2.withdraw(-50)); // Not boundary: Negative amount
+        assertThrows(IllegalArgumentException.class, () -> bankAccount2.withdraw(0)); // Boundary: Zero amount
+
+        // insufficient funds
+        assertThrows(InsufficientFundsException.class, () -> bankAccount2.withdraw(100.01)); // Boundary, amount is just
+                                                                                             // over balance
+        assertThrows(InsufficientFundsException.class, () -> bankAccount2.withdraw(150)); // Not boundary, amount is
+                                                                                          // well over balance
     }
 
     @Test
