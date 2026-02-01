@@ -8,68 +8,67 @@ public class BankAccount {
     /**
      * @throws IllegalArgumentException if email is invalid
      */
-    public BankAccount(String email, double startingBalance){
-        if (isEmailValid(email)){
+    public BankAccount(String email, double startingBalance) {
+        if (isEmailValid(email)) {
             this.email = email;
             this.balance = startingBalance;
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Email address: " + email + " is invalid, cannot create account");
         }
     }
 
-    public double getBalance(){
+    public double getBalance() {
         return balance;
     }
 
-    public String getEmail(){
+    public String getEmail() {
         return email;
     }
 
     /**
-     * @post reduces the balance by amount if amount is non-negative and smaller than balance
+     * @post reduces the balance by amount if amount is non-negative and smaller
+     *       than balance
+     *       throws an IllegalArgumentException if amount is negative or 0
+     *       throws an InsufficientFundsException if amount is greater than balance
      */
-    public void withdraw (double amount) throws InsufficientFundsException{
-        if (amount <= balance){
+    public void withdraw(double amount) throws InsufficientFundsException {
+        if (amount <= balance) {
             balance -= amount;
-        }
-        else {
+        } else {
             throw new InsufficientFundsException("Not enough money");
         }
     }
 
-
-    public static boolean isEmailValid(String email){
+    public static boolean isEmailValid(String email) {
         // Checks for empty/blank email
-        if (email.isBlank()){
+        if (email.isBlank()) {
             return false;
         }
 
         // Find @ symbol, right most period
         int atIndex = email.indexOf('@');
         int lastPeriodIndex = email.lastIndexOf('.');
-        if (atIndex == -1 || lastPeriodIndex == -1 || lastPeriodIndex <= atIndex){
+        if (atIndex == -1 || lastPeriodIndex == -1 || lastPeriodIndex <= atIndex) {
             return false;
         }
 
         // Check if prefix is missing
-        if (atIndex == 0){
+        if (atIndex == 0) {
             return false;
         }
- 
+
         // Deal with prefix
-        for (int i = 0; i < atIndex; i++){
+        for (int i = 0; i < atIndex; i++) {
             char c = email.charAt(i);
             // Check alphaNum or special char
             boolean charAlphaNum = Character.isLetterOrDigit(c);
-            if (!charAlphaNum){
-                if (!isPrefixSpecial(c)){
+            if (!charAlphaNum) {
+                if (!isPrefixSpecial(c)) {
                     // Neither alphaNum or valid special
                     return false;
-                }
-                else {
+                } else {
                     // Checking multiple special chars in a row, or first char
-                    if (!Character.isLetterOrDigit(email.charAt(i + 1)) || i == 0){
+                    if (!Character.isLetterOrDigit(email.charAt(i + 1)) || i == 0) {
                         return false;
                     }
                     // Incrementing an additional time as no need to recheck if its valid character
@@ -79,16 +78,16 @@ public class BankAccount {
         }
 
         // Deal with domain
-        if (lastPeriodIndex + 2 >= email.length()){
+        if (lastPeriodIndex + 2 >= email.length()) {
             // Last portion of domain too small
             return false;
         }
-        for (int i = atIndex + 1; i < email.length(); i++){
+        for (int i = atIndex + 1; i < email.length(); i++) {
             char c = email.charAt(i);
             // Check alphaNum, dash
-            if (!(Character.isLetterOrDigit(c)) && !(c == '-')){
+            if (!(Character.isLetterOrDigit(c)) && !(c == '-')) {
                 // See if its the one allowed period
-                if (!(c == '.' && i == lastPeriodIndex)){
+                if (!(c == '.' && i == lastPeriodIndex)) {
                     return false;
                 }
             }
@@ -99,11 +98,13 @@ public class BankAccount {
     }
 
     // Returns true if it is a special character valid in the prefix
-    public static boolean isPrefixSpecial(char c){
-        // Everything in the wiki link under special characters, minus # as it was included in a test as invalid...
-        char[] prefixSpecial = {'.', '!', '$', '%', '&', '\'', '*', '+', '-', '/', '=', '?', '^', '_', '`', '{', '|', '}', '~'};
-        for (char special : prefixSpecial){
-            if (special == c){
+    public static boolean isPrefixSpecial(char c) {
+        // Everything in the wiki link under special characters, minus # as it was
+        // included in a test as invalid...
+        char[] prefixSpecial = { '.', '!', '$', '%', '&', '\'', '*', '+', '-', '/', '=', '?', '^', '_', '`', '{', '|',
+                '}', '~' };
+        for (char special : prefixSpecial) {
+            if (special == c) {
                 return true;
             }
         }
