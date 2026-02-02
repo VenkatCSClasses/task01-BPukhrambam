@@ -34,8 +34,7 @@ public class BankAccount {
     public void withdraw(double amount) throws InsufficientFundsException {
         if (amount <= 0) {
             throw new IllegalArgumentException("Must enter non-negative withdrawal amount");
-        }
-        else if (amount <= balance) {
+        } else if (amount <= balance) {
             balance -= amount;
         } else {
             throw new InsufficientFundsException("Not enough money");
@@ -117,6 +116,16 @@ public class BankAccount {
     // Takes a double and returns true if the amount is positive and has two decimal
     // points or less, and false otherwise.
     public static boolean isAmountValid(double amount) {
-        return false;
+        if (amount < 0) {
+            return false;
+        }
+        String amountString = Double.toString(amount);
+        if (amountString.contains(".")) {
+            String[] parts = amountString.split("\\.");
+            if (parts[1].length() > 2) {
+                return false;
+            }
+        }
+        return true;
     }
 }

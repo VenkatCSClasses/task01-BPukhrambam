@@ -141,11 +141,11 @@ class BankAccountTest {
     @Test
     void isAmountValidTest() {
         // numbers of digits after decimal
-        assertFalse(BankAccount.isAmountValid(0.000)); // boundary case: lowest three digits after decimal
-        assertFalse(BankAccount.isAmountValid(54.020)); // not boundary case: three digits after decimal
+        assertFalse(BankAccount.isAmountValid(0.001)); // boundary case: lowest three digits after decimal
+        assertFalse(BankAccount.isAmountValid(54.021)); // not boundary case: three digits after decimal
         assertTrue(BankAccount.isAmountValid(0.99)); // boundary case: highest two digits after decimal
-        assertTrue(BankAccount.isAmountValid(2.0)); // not boundary: one digit after decimal
-        assertTrue(BankAccount.isAmountValid(200.00)); // not boundary: two digits after decimal
+        assertTrue(BankAccount.isAmountValid(2.1)); // not boundary: one digit after decimal
+        assertTrue(BankAccount.isAmountValid(200.01)); // not boundary: two digits after decimal
 
         // negative amount
         assertTrue(BankAccount.isAmountValid(0.0)); // boundary: lowest positive amount
