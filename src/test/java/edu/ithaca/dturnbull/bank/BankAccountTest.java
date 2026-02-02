@@ -31,6 +31,8 @@ class BankAccountTest {
         BankAccount bankAccount2 = new BankAccount("b@c.com", 100);
         assertThrows(IllegalArgumentException.class, () -> bankAccount2.withdraw(-50)); // Not boundary: Negative amount
         assertThrows(IllegalArgumentException.class, () -> bankAccount2.withdraw(0)); // Boundary: Zero amount
+        assertThrows(IllegalArgumentException.class, () -> bankAccount2.withdraw(10.001)); // Boundary: three digits
+                                                                                           // after decimal
 
         // insufficient funds
         assertThrows(InsufficientFundsException.class, () -> bankAccount2.withdraw(100.01)); // Boundary, amount is just
@@ -132,10 +134,20 @@ class BankAccountTest {
     void constructorTest() {
         BankAccount bankAccount = new BankAccount("a@b.com", 200);
 
-        assertEquals("a@b.com", bankAccount.getEmail());
-        assertEquals(200, bankAccount.getBalance(), 0.001);
+        assertEquals("a@b.com", bankAccount.getEmail()); // correct email
+        assertEquals(200, bankAccount.getBalance(), 0.001); // correct balance
+
+        BankAccount bankAccount2 = new BankAccount("b@g.com", 20.34);
+
+        assertEquals(20.34, bankAccount2.getBalance(), 0.001); // amount with two digits after decimal
+
         // check for exception thrown correctly
-        assertThrows(IllegalArgumentException.class, () -> new BankAccount("", 100));
+        assertThrows(IllegalArgumentException.class, () -> new BankAccount("", 100)); // no email
+        assertThrows(IllegalArgumentException.class, () -> new BankAccount("b@c.com", -100.02)); // negative amount
+        assertThrows(IllegalArgumentException.class, () -> new BankAccount("b@c.com", 100.001)); // amount with more
+                                                                                                 // than two digits
+                                                                                                 // after decimal
+
     }
 
     @Test
