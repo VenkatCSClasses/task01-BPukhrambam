@@ -138,4 +138,20 @@ class BankAccountTest {
         assertThrows(IllegalArgumentException.class, () -> new BankAccount("", 100));
     }
 
+    @Test
+    void isAmountValidTest() {
+        // numbers of digits after decimal
+        assertFalse(BankAccount.isAmountValid(0.000)); // boundary case: lowest three digits after decimal
+        assertFalse(BankAccount.isAmountValid(54.020)); // not boundary case: three digits after decimal
+        assertTrue(BankAccount.isAmountValid(0.99)); // boundary case: highest two digits after decimal
+        assertTrue(BankAccount.isAmountValid(2.0)); // not boundary: one digit after decimal
+        assertTrue(BankAccount.isAmountValid(200.00)); // not boundary: two digits after decimal
+
+        // negative amount
+        assertTrue(BankAccount.isAmountValid(0.0)); // boundary: lowest positive amount
+        assertTrue(BankAccount.isAmountValid(20.0)); // not boundary: positive amount
+        assertFalse(BankAccount.isAmountValid(-0.01)); // boundary: highest negative amount
+        assertFalse(BankAccount.isAmountValid(-100.00)); // not boundary: negative amount
+    }
+
 }
