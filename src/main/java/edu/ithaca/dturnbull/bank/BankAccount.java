@@ -148,11 +148,20 @@ public class BankAccount {
 
     /**
      * @post transfers amount from this account to bankAccount if amount is valid
-     *       throws an IllegalArgumentException if amount is invalid
-     *       throws an InsufficientFundsException if amount is greater than balance
+     * @throws IllegalArgumentException   if amount is invalid
+     * @throws InsufficientFundsException if amount is greater than balance
      */
-    public void transfer(BankAccount bankAccount, double amount) {
-        throw new IllegalArgumentException("Not yet implemented");
+    public void transfer(BankAccount bankAccount, double amount) throws InsufficientFundsException {
+        if (isAmountValid(amount)) {
+            if (amount <= balance) {
+                this.withdraw(amount);
+                bankAccount.deposit(amount);
+            } else {
+                throw new InsufficientFundsException("Not enough money");
+            }
+        } else {
+            throw new IllegalArgumentException("Invalid transfer amount");
+        }
     }
 
 }

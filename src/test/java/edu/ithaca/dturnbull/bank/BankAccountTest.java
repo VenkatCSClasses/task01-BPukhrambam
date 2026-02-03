@@ -192,7 +192,7 @@ class BankAccountTest {
     }
 
     @Test
-    void transferTest() {
+    void transferTest() throws InsufficientFundsException {
         BankAccount bankAccount1 = new BankAccount("a@b.com", 200);
         BankAccount bankAccount2 = new BankAccount("b@c.com", 100);
 
@@ -205,20 +205,37 @@ class BankAccountTest {
         assertEquals(300, bankAccount2.getBalance(), 0.001);
 
         // negative amount
-        assertThrows(IllegalArgumentException.class, () -> bankAccount2.transfer(bankAccount1, -20)); // not boundary: negative amount
-        assertThrows(IllegalArgumentException.class, () -> bankAccount2.transfer(bankAccount1, -0.01)); // boundary: highest negative amount
-        
-        //amount with more than two digits after decimal
-        assertThrows(IllegalArgumentException.class, () -> bankAccount2.transfer(bankAccount1, 10.001)); // boundary: three digits after decimal
-        assertThrows(IllegalArgumentException.class, () -> bankAccount2.transfer(bankAccount1, 5.6789)); // not boundary: more than three digits after decimal
-        bankAccount2.transfer(bankAccount1, 50.99); //boundary: highest two digits after decimal
+        assertThrows(IllegalArgumentException.class, () -> bankAccount2.transfer(bankAccount1, -20)); // not boundary:
+                                                                                                      // negative amount
+        assertThrows(IllegalArgumentException.class, () -> bankAccount2.transfer(bankAccount1, -0.01)); // boundary:
+                                                                                                        // highest
+                                                                                                        // negative
+                                                                                                        // amount
+
+        // amount with more than two digits after decimal
+        assertThrows(IllegalArgumentException.class, () -> bankAccount2.transfer(bankAccount1, 10.001)); // boundary:
+                                                                                                         // three digits
+                                                                                                         // after
+                                                                                                         // decimal
+        assertThrows(IllegalArgumentException.class, () -> bankAccount2.transfer(bankAccount1, 5.6789)); // not
+                                                                                                         // boundary:
+                                                                                                         // more than
+                                                                                                         // three digits
+                                                                                                         // after
+                                                                                                         // decimal
+        bankAccount2.transfer(bankAccount1, 50.99); // boundary: highest two digits after decimal
         assertEquals(249.01, bankAccount2.getBalance(), 0.001);
         assertEquals(50.99, bankAccount1.getBalance(), 0.001);
 
-        //Insufficient funds
-        assertThrows(InsufficientFundsException.class, () -> bankAccount1.transfer(bankAccount2, 51)); //boundary: amount just over balance
-        assertThrows(InsufficientFundsException.class, () -> bankAccount1.transfer(bankAccount2, 100)); // not boundary: amount well over balance
-        bankAccount1.transfer(bankAccount2, 50.98); //boundary: just below entire remaining balance
+        // Insufficient funds
+        assertThrows(InsufficientFundsException.class, () -> bankAccount1.transfer(bankAccount2, 51)); // boundary:
+                                                                                                       // amount just
+                                                                                                       // over balance
+        assertThrows(InsufficientFundsException.class, () -> bankAccount1.transfer(bankAccount2, 100)); // not boundary:
+                                                                                                        // amount well
+                                                                                                        // over balance
+        bankAccount1.transfer(bankAccount2, 50.98); // boundary: just below entire remaining balance
         assertEquals(0.01, bankAccount1.getBalance(), 0.001);
         assertEquals(299.99, bankAccount2.getBalance(), 0.001);
     }
+}
