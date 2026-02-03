@@ -166,4 +166,29 @@ class BankAccountTest {
         assertFalse(BankAccount.isAmountValid(-100.00)); // not boundary: negative amount
     }
 
+    @Test
+    void depositTest() {
+        BankAccount bankAccount = new BankAccount("a@b.com", 100);
+
+        // valid deposit
+        bankAccount.deposit(50);
+        assertEquals(150, bankAccount.getBalance(), 0.001); // not boundary: valid deposit
+
+        // negative amount
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(-20)); // not boundary: negative amount
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(-0.01)); // boundary: highest negative
+                                                                                        // amount
+        bankAccount.deposit(0);
+        assertEquals(150, bankAccount.getBalance(), 0.001); // boundary: zero deposit
+
+        // amount with more than two digits after decimal
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(10.001)); // boundary: three digits after
+                                                                                         // decimal
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(5.6789)); // not boundary: more than
+                                                                                         // three digits after decimal
+        bankAccount.deposit(20.99);
+        assertEquals(170.99, bankAccount.getBalance(), 0.001); // boundary: valid deposit with highest two digits after
+                                                               // decimal
+    }
+
 }
