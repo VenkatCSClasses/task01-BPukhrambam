@@ -146,4 +146,13 @@ public class BankAccount {
         }
     }
 
+    /**
+     * @post transfers amount from this account to bankAccount if amount is valid
+     *       throws an IllegalArgumentException if amount is invalid
+     *       throws an InsufficientFundsException if amount is greater than balance
+     */
+    public void transfer(BankAccount bankAccount, double amount) {
+        throw new IllegalArgumentException("Not yet implemented");
+    }
+
 }
