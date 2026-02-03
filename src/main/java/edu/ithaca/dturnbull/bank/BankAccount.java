@@ -139,7 +139,11 @@ public class BankAccount {
      *       throws an IllegalArgumentException if amount is valid
      */
     public void deposit(double amount) {
-        throw new IllegalArgumentException("Method not implemented yet");
+        if (isAmountValid(amount)) {
+            balance += amount;
+        } else {
+            throw new IllegalArgumentException("Invalid deposit amount");
+        }
     }
 
 }
